@@ -3,16 +3,23 @@ FastAPI 应用主入口文件
 
 此模块创建了一个最小化的 FastAPI 应用，包含根路径和健康检查端点。
 """
+from typing import Dict
 
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-from typing import Dict
+
+from app.core.config import get_settings
+
+
+settings = get_settings()
+
 
 # 创建 FastAPI 应用实例
 app = FastAPI(
-    title="FastAPI Standard Template",
-    description="一个符合最佳实践的 FastAPI 应用模板",
-    version="1.0.0",
+    title=settings.PROJECT_NAME,
+    description=settings.DESCRIPTION,
+    version=settings.VERSION,
+    debug=settings.DEBUG
 )
 
 
