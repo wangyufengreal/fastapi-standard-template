@@ -9,7 +9,10 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
 from app.core.config import get_settings
+from app.core.logging import configure_logging
+from app.core.middleware import LoggingMiddleware
 
+configure_logging()
 
 settings = get_settings()
 
@@ -21,6 +24,7 @@ app = FastAPI(
     version=settings.VERSION,
     debug=settings.DEBUG
 )
+app.add_middleware(LoggingMiddleware)
 
 
 @app.get("/")
