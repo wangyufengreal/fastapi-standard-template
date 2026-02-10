@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "FastAPI: Debug Granian",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "granian",
+            "args": [
+                "--interface",
+                "asgi",
+                "app.main:app",
+            ],
+            "jinja": true,
+            "envFile": "${workspaceFolder}/.venv",
+        },
+    ]
+}
