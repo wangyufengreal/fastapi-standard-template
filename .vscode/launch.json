@@ -11,6 +11,9 @@
                 "asgi",
                 "app.main:app",
             ],
+            "env": {
+                "ENV_FILE": ".env.dev"
+            },
             "jinja": true,
             "envFile": "${workspaceFolder}/.venv",
         },
