@@ -9,4 +9,6 @@ dependencies = [
     "granian>=2.7.0",
     "pydantic>=2.12.5",
     "pydantic-settings>=2.12.0",
+    "rich>=14.3.2",
+    "structlog>=25.5.0",
 ]
