@@ -1,10 +1,13 @@
 import structlog
 from structlog.stdlib import BoundLogger
-from fastapi import Request
+from fastapi import Request, FastAPI
 from fastapi.responses import JSONResponse
 
 from app.core.error_code import ErrorCode
-from app.core.exception import AppException
+from app.core.exception import (
+    AppException, ParamError, ValidationError, 
+    BussinessError, UnanthorizedException, 
+    ForbiddenException, SystemError)
 from app.core.response import ResponseModel
 
 
@@ -33,3 +36,13 @@ async def global_exception_handler(request: Request, _: Exception):
             message=ErrorCode.SYSTEM_ERROR.message,
         ),
     )
+
+def init_exception_handlers(app: FastAPI):
+    business_exceptions = [
+        AppException, ParamError, ValidationError, BussinessError,
+        UnanthorizedException, ForbiddenException, SystemError
+    ]
+    for exc in business_exceptions:
+        app.add_exception_handler(exc, app_exception_handler)
+
+    app.add_exception_handler(Exception, global_exception_handler)
