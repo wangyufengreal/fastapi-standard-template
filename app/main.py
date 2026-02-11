@@ -11,6 +11,7 @@ from fastapi.responses import JSONResponse
 from app.core.config import get_settings
 from app.core.logging import configure_logging
 from app.core.middleware import LoggingMiddleware
+from app.core.response import ResponseModel
 
 configure_logging()
 
@@ -27,7 +28,7 @@ app = FastAPI(
 app.add_middleware(LoggingMiddleware)
 
 
-@app.get("/")
+@app.get("/", response_model=ResponseModel[str])
 async def read_root() -> Dict[str, str]:
     """
     根路径端点
@@ -35,10 +36,10 @@ async def read_root() -> Dict[str, str]:
     返回:
         Dict[str, str]: 包含欢迎消息的字典
     """
-    return {"message": "欢迎使用 FastAPI 标准模板"}
+    return ResponseModel.success(data="欢迎使用 FastAPI 标准模板")
 
 
-@app.get("/health")
+@app.get("/health", response_model=ResponseModel[str])
 async def health_check() -> JSONResponse:
     """
     健康检查端点
@@ -46,10 +47,4 @@ async def health_check() -> JSONResponse:
     返回:
         JSONResponse: 包含应用健康状态的 JSON 响应
     """
-    health_status = {
-        "status": "healthy",
-        "service": "fastapi-template",
-        "version": "1.0.0",
-        "timestamp": "2026-02-05T06:13:25Z"
-    }
-    return JSONResponse(content=health_status)
+    return ResponseModel.success(data="服务工作正常")
