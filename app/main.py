@@ -12,6 +12,11 @@ from app.core.config import get_settings
 from app.core.logging import configure_logging
 from app.core.middleware import LoggingMiddleware
 from app.core.response import ResponseModel
+from app.core.exception import (
+    AppException, ParamError, ValidationError, BussinessError, 
+    UnanthorizedException, ForbiddenException, SystemError
+)
+from app.core.exception_handler import app_exception_handler, global_exception_handler
 
 configure_logging()
 
@@ -26,6 +31,14 @@ app = FastAPI(
     debug=settings.DEBUG
 )
 app.add_middleware(LoggingMiddleware)
+app.add_exception_handler(AppException, app_exception_handler)
+app.add_exception_handler(ParamError, app_exception_handler)
+app.add_exception_handler(ValidationError, app_exception_handler)
+app.add_exception_handler(BussinessError, app_exception_handler)
+app.add_exception_handler(UnanthorizedException, app_exception_handler)
+app.add_exception_handler(ForbiddenException, app_exception_handler)
+app.add_exception_handler(SystemError, app_exception_handler)
+app.add_exception_handler(Exception, global_exception_handler)
 
 
 @app.get("/", response_model=ResponseModel[str])
