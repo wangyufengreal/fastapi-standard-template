@@ -1,13 +1,14 @@
 import time
 
 import structlog
+from structlog.stdlib import BoundLogger
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.core.log_context import request_id_ctx
 
 
-logger = structlog.get_logger()
+logger: BoundLogger = structlog.get_logger()
 
 
 class LoggingMiddleware(BaseHTTPMiddleware):
