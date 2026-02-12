@@ -12,8 +12,9 @@ class ErrorCode(Enum):
     4xxxx: 资源错误
     5xxxx: 系统/内部错误
     """
+
     SUCCESS = (0, "请求成功")
-    
+
     # ===== 参数/校验错误 =====
     PARAM_ERROR = (10001, "参数错误")
     VALIDATION_ERROR = (10002, "参数校验失败")
@@ -31,7 +32,7 @@ class ErrorCode(Enum):
     @property
     def code(self) -> int:
         return self.value[0]
-    
+
     @property
     def message(self) -> str:
         return self.value[1]

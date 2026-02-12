@@ -1,8 +1,8 @@
 import os
 from functools import lru_cache
 
-from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field, field_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -34,13 +34,14 @@ class Settings(BaseSettings):
         if v not in {"dev", "test", "prod"}:
             raise ValueError("ENV 必须为 dev / test / prod 其中之一")
         return v
-    
+
     @field_validator("SECRET_KEY")
     @classmethod
     def validate_secret_key(cls, v: str, info):
         if info.data.get("ENV") == "prod" and v == "change-me":
             raise ValueError("SECRET_KEY 在生产环境中必须更改")
         return v
+
 
 @lru_cache
 def get_settings() -> Settings:
