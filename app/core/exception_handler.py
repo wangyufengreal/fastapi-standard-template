@@ -1,17 +1,22 @@
 import structlog
-from structlog.stdlib import BoundLogger
-from fastapi import Request, FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from structlog.stdlib import BoundLogger
 
 from app.core.error_code import ErrorCode
 from app.core.exception import (
-    AppException, ParamError, ValidationError, 
-    BussinessError, UnanthorizedException, 
-    ForbiddenException, SystemError)
+    AppException,
+    BussinessError,
+    ForbiddenException,
+    ParamError,
+    SystemError,
+    UnanthorizedException,
+    ValidationError,
+)
 from app.core.response import ResponseModel
 
-
 logger: BoundLogger = structlog.get_logger()
+
 
 async def app_exception_handler(request: Request, exc: AppException):
     logger.warning(
@@ -25,22 +30,27 @@ async def app_exception_handler(request: Request, exc: AppException):
         ),
     )
 
+
 async def global_exception_handler(request: Request, _: Exception):
-    logger.exception(
-        f"未捕获的异常: path='{request.url.path}'"
-    )
+    logger.exception(f"未捕获的异常: path='{request.url.path}'")
     return JSONResponse(
         status_code=500,
         content=ResponseModel.error(
-            code=ErrorCode.SYSTEM_ERROR.code, 
+            code=ErrorCode.SYSTEM_ERROR.code,
             message=ErrorCode.SYSTEM_ERROR.message,
         ),
     )
 
+
 def init_exception_handlers(app: FastAPI):
     business_exceptions = [
-        AppException, ParamError, ValidationError, BussinessError,
-        UnanthorizedException, ForbiddenException, SystemError
+        AppException,
+        ParamError,
+        ValidationError,
+        BussinessError,
+        UnanthorizedException,
+        ForbiddenException,
+        SystemError,
     ]
     for exc in business_exceptions:
         app.add_exception_handler(exc, app_exception_handler)

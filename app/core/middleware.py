@@ -1,12 +1,11 @@
 import time
 
 import structlog
-from structlog.stdlib import BoundLogger
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
+from structlog.stdlib import BoundLogger
 
 from app.core.log_context import request_id_ctx
-
 
 logger: BoundLogger = structlog.get_logger()
 
@@ -28,7 +27,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
                 latency_ms=latency,
             )
             return response
-        
+
         except Exception:
             logger.exception(
                 "请求失败",
